@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SavEarn AWS Integration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 SavEarn AWS Integration Test</h1>
+    
+    <div class="test info">
+        <h3>AWS Configuration</h3>
+        <p><strong>API URL:</strong> https://0zu0t6r210.execute-api.ap-south-1.amazonaws.com/dev</p>
+        <p><strong>Region:</strong> ap-south-1 (Mumbai)</p>
+        <p><strong>User Pool:</strong> ap-south-1_zybIVZnp4</p>
+    </div>
+
+    <div class="test">
+        <h3>1. Test API Connectivity</h3>
+        <button onclick="testAPI()">Test API Connection</button>
+        <div id="api-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>2. Test User Registration</h3>
+        <input type="text" id="test-name" placeholder="Your Name" value="Test User">
+        <input type="email" id="test-email" placeholder="test@example.com" value="">
+        <input type="password" id="test-password" placeholder="Password" value="TestPass123">
+        <br>
+        <button onclick="testSignup()">Test Signup</button>
+        <div id="signup-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>2b. Email Verification</h3>
+        <input type="email" id="verify-email" placeholder="Email to verify" value="">
+        <input type="text" id="verify-code" placeholder="Verification code from email" value="">
+        <br>
+        <button onclick="testVerification()">Verify Email</button>
+        <div id="verify-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>3. Test Login</h3>
+        <input type="email" id="login-email" placeholder="Email" value="">
+        <input type="password" id="login-password" placeholder="Password" value="TestPass123">
+        <br>
+        <button onclick="testLogin()">Test Login</button>
+        <div id="login-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>4. Test Earnings API</h3>
+        <button onclick="testEarnings()">Test Create Earning</button>
+        <div id="earnings-result"></div>
+    </div>
+
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1578.0.min.js"></script>
+    <script>
+        const AWS_CONFIG = {
+            API_BASE_URL: 'https://0zu0t6r210.execute-api.ap-south-1.amazonaws.com/dev',
+            COGNITO: {
+                userPoolId: 'ap-south-1_zybIVZnp4',
+                clientId: '50eekrtr5d8olj5vj3qqokt1jl',
+                region: 'ap-south-1'
+            },
+            REGION: 'ap-south-1'
+        };
+
+        AWS.config.region = AWS_CONFIG.REGION;
+        const cognito = new AWS.CognitoIdentityServiceProvider();
+        let authToken = null;
+
+        function showResult(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="${isError ? 'error' : 'success'}">${message}</div>`;
+        }
+
+        async function testAPI() {
+            try {
+                const response = await fetch(`${AWS_CONFIG.API_BASE_URL}/user/profile`);
+                
+                if (response.status === 401) {
+                    showResult('api-result', '✅ API is working! (Expected: Unauthorized without auth token)');
+                } else if (response.ok) {
+                    const result = await response.json();
+                    showResult('api-result', `✅ API Response: ${JSON.stringify(result)}`);
+                } else {
+                    showResult('api-result', `⚠️ API returned status: ${response.status}. This might be expected.`);
+                }
+            } catch (error) {
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    showResult('api-result', '⚠️ CORS error (expected when testing locally). API Gateway is likely working fine.');
+                } else {
+                    showResult('api-result', `❌ API Error: ${error.message}`, true);
+                }
+            }
+        }
+
+        async function testSignup() {
+            const name = document.getElementById('test-name').value;
+            const email = document.getElementById('test-email').value;
+            const password = document.getElementById('test-password').value;
+
+            if (!email || !password) {
+                showResult('signup-result', '❌ Please fill in email and password', true);
+                return;
+            }
+
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email,
+                    Password: password,
+                    UserAttributes: [
+                        { Name: 'email', Value: email },
+                        { Name: 'name', Value: name }
+                    ]
+                };
+                
+                const result = await cognito.signUp(params).promise();
+                showResult('signup-result', `✅ Signup successful! UserSub: ${result.UserSub}. Check your email for verification.`);
+                
+                // Copy email to verification and login fields
+                document.getElementById('verify-email').value = email;
+                document.getElementById('login-email').value = email;
+            } catch (error) {
+                if (error.code === 'UsernameExistsException') {
+                    showResult('signup-result', '⚠️ User already exists. Try logging in instead.');
+                    document.getElementById('login-email').value = email;
+                } else {
+                    showResult('signup-result', `❌ Signup Error: ${error.message}`, true);
+                }
+            }
+        }
+
+        async function testVerification() {
+            const email = document.getElementById('verify-email').value;
+            const code = document.getElementById('verify-code').value;
+
+            if (!email || !code) {
+                showResult('verify-result', '❌ Please fill in email and verification code', true);
+                return;
+            }
+
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email,
+                    ConfirmationCode: code
+                };
+                
+                await cognito.confirmSignUp(params).promise();
+                showResult('verify-result', '✅ Email verified successfully! You can now login.');
+                
+                // Copy email to login field
+                document.getElementById('login-email').value = email;
+            } catch (error) {
+                showResult('verify-result', `❌ Verification Error: ${error.message}`, true);
+            }
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showResult('login-result', '❌ Please fill in email and password', true);
+                return;
+            }
+
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    AuthFlow: 'USER_PASSWORD_AUTH',
+                    AuthParameters: {
+                        USERNAME: email,
+                        PASSWORD: password
+                    }
+                };
+                
+                const result = await cognito.initiateAuth(params).promise();
+                authToken = result.AuthenticationResult.AccessToken;
+                
+                showResult('login-result', `✅ Login successful! Token received.`);
+            } catch (error) {
+                if (error.code === 'UserNotConfirmedException') {
+                    showResult('login-result', '⚠️ Please verify your email before logging in.', true);
+                } else {
+                    showResult('login-result', `❌ Login Error: ${error.message}`, true);
+                }
+            }
+        }
+
+        async function testEarnings() {
+            if (!authToken) {
+                showResult('earnings-result', '❌ Please login first to test earnings API', true);
+                return;
+            }
+
+            try {
+                const earningData = {
+                    datetime: new Date().toISOString(),
+                    expensiveOption: 'Restaurant Meal',
+                    expensiveAmount: 500,
+                    chosenOption: 'Home Cooking',
+                    chosenAmount: 100,
+                    description: 'Test earning entry',
+                    category: 'food'
+                };
+
+                const response = await fetch(`${AWS_CONFIG.API_BASE_URL}/earnings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(earningData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult('earnings-result', `✅ Earning created! ID: ${result.entryId}, Earned: ₹${result.earned}`);
+                } else {
+                    showResult('earnings-result', `❌ API Error: ${result.message}`, true);
+                }
+            } catch (error) {
+                showResult('earnings-result', `❌ Earnings Error: ${error.message}`, true);
+            }
+        }
+
+        // Auto-test API on load
+        window.onload = () => testAPI();
+    </script>
+</body>
+</html>

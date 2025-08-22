@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SavEarn API Test</title>
+</head>
+<body>
+    <h1>SavEarn API Debug Test</h1>
+    <div id="results"></div>
+    
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+    <script src="aws-config.js"></script>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(message) {
+            results.innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+        
+        async function testAPI() {
+            log('🧪 Starting API Test...');
+            
+            // Configure AWS
+            AWS.config.region = AWS_CONFIG.REGION;
+            const cognito = new AWS.CognitoIdentityServiceProvider();
+            
+            try {
+                // Test 1: Try to login with a test user
+                log('🔐 Testing login...');
+                
+                const loginParams = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    AuthFlow: 'USER_PASSWORD_AUTH',
+                    AuthParameters: {
+                        USERNAME: 'test@example.com',  // Replace with your test user
+                        PASSWORD: 'TempPassword123!'   // Replace with your test password
+                    }
+                };
+                
+                const loginResult = await cognito.initiateAuth(loginParams).promise();
+                const token = loginResult.AuthenticationResult.AccessToken;
+                
+                log('✅ Login successful! Token length: ' + token.length);
+                
+                // Test 2: Try API call
+                log('🌐 Testing API call...');
+                
+                const response = await fetch(AWS_CONFIG.API_BASE_URL + '/earnings', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                log('📥 Response status: ' + response.status);
+                
+                const data = await response.json();
+                log('📦 Response data: ' + JSON.stringify(data, null, 2));
+                
+                if (response.ok) {
+                    log('✅ API call successful!');
+                } else {
+                    log('❌ API call failed: ' + data.message);
+                }
+                
+            } catch (error) {
+                log('💥 Error: ' + error.message);
+                console.error('Full error:', error);
+            }
+        }
+        
+        // Run test automatically
+        testAPI();
+    </script>
+</body>
+</html>

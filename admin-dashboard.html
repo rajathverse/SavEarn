@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SavEarn Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1578.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Login Form (shown initially) -->
+        <div id="admin-login" class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-md w-full space-y-8">
+                <div>
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        🔧 Admin Login
+                    </h2>
+                    <p class="mt-2 text-center text-sm text-gray-600">
+                        SavEarn Administrative Dashboard
+                    </p>
+                </div>
+                <form id="admin-login-form" class="mt-8 space-y-6">
+                    <div class="rounded-md shadow-sm -space-y-px">
+                        <div>
+                            <label for="admin-email" class="sr-only">Email address</label>
+                            <input id="admin-email" name="email" type="email" required 
+                                   class="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" 
+                                   placeholder="Admin email address">
+                        </div>
+                        <div>
+                            <label for="admin-password" class="sr-only">Password</label>
+                            <input id="admin-password" name="password" type="password" required 
+                                   class="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" 
+                                   placeholder="Admin password">
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Sign in as Admin
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i data-lucide="alert-triangle" class="h-5 w-5 text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">
+                                Development Mode
+                            </h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p>For testing, you can use any email/password combination. In production, implement proper admin authentication.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard (hidden initially) -->
+        <div id="admin-dashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        🔧 SavEarn Admin Dashboard
+                    </h1>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-500">
+                            User Pool: ap-south-1_zybIVZnp4
+                        </div>
+                        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200">
+                            <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="users" class="h-6 w-6 text-gray-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                                    <dd class="text-lg font-medium text-gray-900" id="total-users">Loading...</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="check-circle" class="h-6 w-6 text-green-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Confirmed</dt>
+                                    <dd class="text-lg font-medium text-green-600" id="confirmed-users">Loading...</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="clock" class="h-6 w-6 text-yellow-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Unconfirmed</dt>
+                                    <dd class="text-lg font-medium text-yellow-600" id="unconfirmed-users">Loading...</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="trending-up" class="h-6 w-6 text-blue-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Earnings</dt>
+                                    <dd class="text-lg font-medium text-blue-600" id="total-earnings">Loading...</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium text-gray-900">User Management</h2>
+                        <button onclick="loadUsers()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                            <i data-lucide="refresh-cw" class="h-4 w-4 mr-2"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                        Loading users...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const USER_POOL_ID = 'ap-south-1_zybIVZnp4';
+        const REGION = 'ap-south-1';
+
+        // Configure AWS
+        AWS.config.region = REGION;
+        
+        // You'll need to configure credentials - for security, use IAM roles in production
+        // For testing, you can use: aws configure or AWS credentials file
+        const cognito = new AWS.CognitoIdentityServiceProvider();
+
+        async function loadUsers() {
+            try {
+                document.getElementById('users-table-body').innerHTML = `
+                    <tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">Loading users...</td></tr>
+                `;
+
+                const response = await cognito.listUsers({
+                    UserPoolId: USER_POOL_ID,
+                    Limit: 60
+                }).promise();
+
+                const users = response.Users;
+                
+                // Update stats
+                const confirmedUsers = users.filter(u => u.UserStatus === 'CONFIRMED').length;
+                const unconfirmedUsers = users.filter(u => u.UserStatus !== 'CONFIRMED').length;
+                
+                document.getElementById('total-users').textContent = users.length;
+                document.getElementById('confirmed-users').textContent = confirmedUsers;
+                document.getElementById('unconfirmed-users').textContent = unconfirmedUsers;
+
+                // Update table
+                const tableBody = document.getElementById('users-table-body');
+                if (users.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No users found</td></tr>
+                    `;
+                } else {
+                    tableBody.innerHTML = users.map(user => {
+                        const email = user.Attributes.find(attr => attr.Name === 'email')?.Value || 'N/A';
+                        const name = user.Attributes.find(attr => attr.Name === 'name')?.Value || 'N/A';
+                        const statusColor = user.UserStatus === 'CONFIRMED' ? 'green' : 
+                                          user.UserStatus === 'UNCONFIRMED' ? 'yellow' : 'red';
+                        
+                        return `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">${name}</div>
+                                        <div class="text-sm text-gray-500">${email}</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-${statusColor}-100 text-${statusColor}-800">
+                                        ${user.UserStatus}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ${new Date(user.UserCreateDate).toLocaleDateString()}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                                    ${user.UserStatus !== 'CONFIRMED' ? 
+                                        `<button onclick="confirmUser('${email}')" class="text-green-600 hover:text-green-900">Confirm</button>` : ''
+                                    }
+                                    <button onclick="resetPassword('${email}')" class="text-blue-600 hover:text-blue-900">Reset Password</button>
+                                    <button onclick="deleteUser('${email}')" class="text-red-600 hover:text-red-900">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Error loading users:', error);
+                document.getElementById('users-table-body').innerHTML = `
+                    <tr><td colspan="4" class="px-6 py-4 text-center text-red-500">
+                        Error loading users: ${error.message}
+                        <br><small>Make sure AWS credentials are configured</small>
+                    </td></tr>
+                `;
+            }
+        }
+
+        async function confirmUser(email) {
+            if (!confirm(`Confirm user ${email}?`)) return;
+            
+            try {
+                await cognito.adminConfirmSignUp({
+                    UserPoolId: USER_POOL_ID,
+                    Username: email
+                }).promise();
+                
+                alert('User confirmed successfully!');
+                loadUsers();
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function resetPassword(email) {
+            const newPassword = prompt(`Enter new password for ${email}:`);
+            if (!newPassword) return;
+            
+            try {
+                await cognito.adminSetUserPassword({
+                    UserPoolId: USER_POOL_ID,
+                    Username: email,
+                    Password: newPassword,
+                    Permanent: true
+                }).promise();
+                
+                alert('Password reset successfully!');
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        async function deleteUser(email) {
+            if (!confirm(`DELETE user ${email}? This cannot be undone!`)) return;
+            if (!confirm(`Are you absolutely sure?`)) return;
+            
+            try {
+                await cognito.adminDeleteUser({
+                    UserPoolId: USER_POOL_ID,
+                    Username: email
+                }).promise();
+                
+                alert('User deleted successfully!');
+                loadUsers();
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+
+        // Admin Login Handler
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // For development - accept any credentials
+            // In production, implement proper authentication
+            if (email && password) {
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                loadUsers();
+            } else {
+                alert('Please enter both email and password');
+            }
+        });
+
+        // Logout functionality
+        function logout() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
+        }
+
+        // Load users on page load
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

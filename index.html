@@ -1,0 +1,3283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="Transform your savings into earnings with SavEarn - the smart money tracking app">
+    <title>SavEarn - Money Earning Tracker</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAHsElEQVR4nO2beXRT5RrGn5PaVlpaaKHsq7KJgCyyKaKyCLKDyL6JLCKLyCKyiCwii8gisogsoiwii8gisogsIotIK7VQoC0ttKW2SZv0b3LTJmnT5OZ+730nycnJPef7/r6X3/ve9/3e930/APgfwv8DwP8Q/gfwP4T/AUQAAP4H8D+A/wH8D+B/AAEAgP8B/A/gfwC/wQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAzgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgfwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4HwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/g8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8D8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/g8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8DwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- AWS SDK for Cognito -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1578.0.min.js"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        earn: {
+                            50: '#fefce8',
+                            100: '#fef9c3',
+                            200: '#fef08a',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            800: '#854d0e',
+                            900: '#713f12',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .card {
+            @apply bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-200;
+        }
+        
+        .btn-primary {
+            @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200;
+        }
+        
+        .btn-primary-large {
+            @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300;
+            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04);
+        }
+        
+        .btn-primary-large:hover {
+            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+        }
+        
+        .btn-success {
+            @apply bg-gradient-to-r from-success-500 to-success-600 hover:from-success-600 hover:to-success-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200;
+        }
+        
+        .earning-card {
+            @apply bg-gradient-to-br from-earn-50 to-earn-100 border border-earn-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200;
+        }
+        
+        .glass-card {
+            @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .earning-gradient {
+            background: linear-gradient(135deg, #eab308 0%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .modal-overlay {
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Mobile-specific optimizations */
+        @media (max-width: 640px) {
+            .modal-overlay .bg-white {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+                overflow-y: auto;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .glass-card {
+                padding: 0.75rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .btn-primary-large {
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            /* Better touch targets */
+            button, .btn-primary, .btn-success {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            /* Improved table scrolling */
+            .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Better form inputs */
+            input[type="text"], input[type="number"], select, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 0.75rem;
+            }
+        }
+
+        /* Additional mobile enhancements */
+        @media (max-width: 480px) {
+            .text-4xl { font-size: 2rem; }
+            .text-3xl { font-size: 1.75rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-xl { font-size: 1.25rem; }
+            
+            .space-y-6 > * + * { margin-top: 1rem; }
+            .space-y-4 > * + * { margin-top: 0.75rem; }
+            
+            .p-6 { padding: 1rem; }
+            .p-8 { padding: 1.5rem; }
+            
+            .gap-6 { gap: 1rem; }
+            .gap-4 { gap: 0.75rem; }
+            
+            /* Better refresh button positioning on mobile */
+            #refresh-btn {
+                margin: 0 auto;
+                min-width: 40px;
+                min-height: 40px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100">
+        <div class="text-center">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-600 p-6 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center animate-pulse">
+                <i data-lucide="piggy-bank" class="h-12 w-12 text-white"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gradient mb-2">SavEarn</h1>
+            <p class="text-gray-600">Loading your earnings...</p>
+        </div>
+    </div>
+
+    <!-- Login/Signup Page -->
+    <div id="auth-page" class="min-h-screen flex items-center justify-center hidden">
+        <div class="max-w-md w-full mx-4">
+            <!-- Logo and Title -->
+            <div class="text-center mb-8">
+                <div class="bg-gradient-to-r from-primary-500 to-primary-600 p-4 rounded-2xl w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                    <i data-lucide="piggy-bank" class="h-10 w-10 text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-gradient mb-2">SavEarn</h1>
+                <p class="text-gray-600">Transform your savings into earnings</p>
+            </div>
+
+            <!-- Auth Forms Container -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8">
+                <!-- Login Form -->
+                <div id="login-form">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Welcome Back</h2>
+                    
+                    <form id="login-form-element" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email or Username</label>
+                            <input type="text" id="login-username" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter your email or username">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" id="login-password" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter your password">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-primary mt-6">
+                            <i data-lucide="log-in" class="h-4 w-4 mr-2"></i>
+                            Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="mt-4 text-center">
+                        <button onclick="showForgotPasswordForm()" class="text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                            Forgot your password?
+                        </button>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">Don't have an account? 
+                            <button onclick="showSignupForm()" class="text-primary-600 hover:text-primary-700 font-semibold">
+                                Sign up here
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signup-form" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Create Account</h2>
+                    
+                    <form id="signup-form-element" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="signup-name" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter your full name">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="signup-email" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter your email">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                            <input type="text" id="signup-username" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Choose a username">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" id="signup-password" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Password: 8+ chars, uppercase, lowercase, number"
+                                   title="Password must be at least 8 characters with uppercase, lowercase, and number">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-success mt-6">
+                            <i data-lucide="user-plus" class="h-4 w-4 mr-2"></i>
+                            Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">Already have an account? 
+                            <button onclick="showLoginForm()" class="text-primary-600 hover:text-primary-700 font-semibold">
+                                Sign in here
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Email Verification Form -->
+                <div id="verification-form" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Verify Your Email</h2>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="mail" class="h-5 w-5 text-blue-600 mt-0.5"></i>
+                            <div>
+                                <p class="text-sm text-blue-700">
+                                    We've sent a verification code to your email address. 
+                                    Please check your inbox and enter the code below.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="verification-form-element" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="verify-email" readonly
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 outline-none"
+                                   placeholder="Your email address">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                            <input type="text" id="verify-code" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter 6-digit code from email">
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-success mt-6">
+                            <i data-lucide="check-circle" class="h-4 w-4 mr-2"></i>
+                            Verify Email
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6 text-center space-y-2">
+                        <button onclick="resendVerificationCode()" class="text-primary-600 hover:text-primary-700 font-semibold text-sm">
+                            Resend verification code
+                        </button>
+                        <br>
+                        <button onclick="showLoginForm()" class="text-gray-600 hover:text-gray-700 text-sm">
+                            Back to login
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Form -->
+                <div id="forgot-password-form" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Reset Password</h2>
+                    
+                    <form id="forgot-password-form-element" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="forgot-email" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter your email address">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                            <i data-lucide="mail" class="h-4 w-4 mr-2"></i>
+                            Send Reset Code
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6 text-center">
+                        <button onclick="showLoginForm()" class="text-gray-600 hover:text-gray-700 text-sm">
+                            Back to login
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Reset Password Form -->
+                <div id="reset-password-form" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Set New Password</h2>
+                    
+                    <form id="reset-password-form-element" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Verification Code</label>
+                            <input type="text" id="reset-code" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter code from email">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                            <input type="password" id="new-password" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Enter new password (min 8 characters)">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                            <input type="password" id="confirm-password" required
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200"
+                                   placeholder="Confirm new password">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                            <i data-lucide="lock" class="h-4 w-4 mr-2"></i>
+                            Reset Password
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6 text-center">
+                        <button onclick="showForgotPasswordForm()" class="text-gray-600 hover:text-gray-700 text-sm">
+                            Back to reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="min-h-screen hidden">
+        <!-- Header -->
+        <header class="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-gradient-to-r from-primary-500 to-primary-600 p-2 rounded-xl">
+                            <i data-lucide="piggy-bank" class="h-6 w-6 text-white"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold text-gradient">SavEarn</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden sm:flex items-center space-x-2 bg-earn-100 px-4 py-2 rounded-full">
+                            <i data-lucide="trending-up" class="h-4 w-4 text-earn-600"></i>
+                            <span class="text-sm font-semibold text-earn-800" id="total-earned">
+                                ₹0 Total Earned
+                            </span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600">Welcome, <span id="user-name" class="font-semibold"></span></span>
+                            <button onclick="logout()" class="text-sm text-red-600 hover:text-red-700 px-2 py-1 rounded transition-colors">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+            <!-- Hero Section -->
+            <div class="text-center mb-8 sm:mb-12 animate-fade-in">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                    <h2 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight text-center">
+                        You've Earned
+                        <span class="earning-gradient block sm:inline" id="hero-earnings">₹0</span>
+                    </h2>
+                    <button onclick="refreshData()" id="refresh-btn" 
+                            class="flex items-center justify-center p-2 sm:p-2 rounded-lg bg-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 group self-center" 
+                            title="Refresh data from database">
+                        <i data-lucide="refresh-cw" class="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 group-hover:text-primary-600 group-active:animate-spin"></i>
+                    </button>
+                </div>
+                <p class="text-sm sm:text-xl text-gray-600 mb-6 sm:mb-8 px-4">
+                    Every smart choice is money in your pocket. Keep earning!
+                </p>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
+                    <div class="glass-card p-3 sm:p-4 text-center hover-scale">
+                        <i data-lucide="calendar" class="h-5 w-5 sm:h-6 sm:w-6 text-primary-600 mx-auto mb-1 sm:mb-2"></i>
+                        <div class="text-lg sm:text-2xl font-bold text-gray-900" id="today-earnings">₹0</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Today</div>
+                    </div>
+                    
+                    <div class="glass-card p-3 sm:p-4 text-center hover-scale">
+                        <i data-lucide="target" class="h-5 w-5 sm:h-6 sm:w-6 text-success-600 mx-auto mb-1 sm:mb-2"></i>
+                        <div class="text-lg sm:text-2xl font-bold text-gray-900" id="month-earnings">₹0</div>
+                        <div class="text-xs sm:text-sm text-gray-600">This Month</div>
+                    </div>
+                    
+                    <div class="glass-card p-3 sm:p-4 text-center hover-scale">
+                        <i data-lucide="award" class="h-5 w-5 sm:h-6 sm:w-6 text-earn-600 mx-auto mb-1 sm:mb-2"></i>
+                        <div class="text-lg sm:text-2xl font-bold text-gray-900" id="current-streak">0</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Day Streak</div>
+                    </div>
+                    
+                    <div class="glass-card p-3 sm:p-4 text-center hover-scale">
+                        <i data-lucide="bar-chart-3" class="h-5 w-5 sm:h-6 sm:w-6 text-purple-600 mx-auto mb-1 sm:mb-2"></i>
+                        <div class="text-lg sm:text-2xl font-bold text-gray-900" id="total-entries">0</div>
+                        <div class="text-xs sm:text-sm text-gray-600">Smart Choices</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Action - Add Earning Button -->
+            <div class="text-center mb-6 sm:mb-8 px-4">
+                <button onclick="openAddModal()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold flex items-center justify-center space-x-2 sm:space-x-3 mx-auto text-sm sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 w-full sm:w-auto max-w-sm">
+                    <i data-lucide="plus-circle" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                    <span>Add New Earning</span>
+                </button>
+                <p class="text-xs sm:text-sm text-gray-500 mt-2 sm:mt-3">Track another smart spending choice</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex justify-center mb-6 sm:mb-8 px-2">
+                <div class="bg-white p-1 sm:p-2 rounded-xl sm:rounded-2xl shadow-lg w-full sm:w-auto max-w-md">
+                    <div class="grid grid-cols-3 gap-1 sm:flex sm:gap-0">
+                        <button onclick="switchTab('overview')" id="overview-tab" class="px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-200 bg-primary-600 text-white shadow-lg text-sm sm:text-base">
+                            Overview
+                        </button>
+                        <button onclick="switchTab('entries')" id="entries-tab" class="px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-200 text-gray-600 hover:text-primary-600 text-sm sm:text-base">
+                            Entries
+                        </button>
+                        <button onclick="switchTab('analytics')" id="analytics-tab" class="px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold transition-all duration-200 text-gray-600 hover:text-primary-600 text-sm sm:text-base">
+                            Analytics
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview Tab Content -->
+            <div id="overview-content" class="space-y-4 sm:space-y-8">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6" id="stats-cards">
+                    <!-- Stats cards will be populated by JavaScript -->
+                </div>
+
+                <!-- Recent Entries -->
+                <div class="card">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-4 sm:mb-6">
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Recent Earnings</h2>
+                        <div class="text-xs sm:text-sm text-gray-500">Last 5 entries</div>
+                    </div>
+                    <div id="recent-entries" class="space-y-3 sm:space-y-4">
+                        <!-- Recent entries will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab Content -->
+            <div id="analytics-content" class="space-y-4 sm:space-y-8 hidden">
+                <!-- Daily Earnings Chart -->
+                <div class="card">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">Daily Earnings Trend</h3>
+                        <select id="month-selector" class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 bg-white focus:ring-2 focus:ring-earn-500 focus:border-earn-500 w-full sm:w-auto">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="chart-container h-64 sm:h-80">
+                        <canvas id="daily-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+                    <!-- Category Distribution -->
+                    <div class="card">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Earnings by Category</h3>
+                        <div class="chart-container h-64 sm:h-80">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Earnings -->
+                    <div class="card">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Monthly Earnings</h3>
+                        <div class="chart-container h-64 sm:h-80">
+                            <canvas id="monthly-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Stats Table -->
+                <div class="card">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Category Breakdown</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm" id="category-table">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Category</th>
+                                    <th class="text-right py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Earned</th>
+                                    <th class="text-right py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600 hidden sm:table-cell">Entries</th>
+                                    <th class="text-right py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">%</th>
+                                </tr>
+                            </thead>
+                            <tbody id="category-table-body">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Entries Tab Content -->
+            <div id="entries-content" class="space-y-4 sm:space-y-6 hidden">
+                <!-- Search and Filter Bar -->
+                <div class="card">
+                    <div class="flex flex-col gap-4 mb-4 sm:mb-6">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">All Entries</h3>
+                        <div class="space-y-3 sm:space-y-0 sm:flex sm:flex-row sm:gap-3">
+                            <!-- Search -->
+                            <div class="relative flex-1">
+                                <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+                                <input type="text" id="entries-search" placeholder="Search entries..." 
+                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                            <!-- Filters Row -->
+                            <div class="grid grid-cols-2 gap-2 sm:flex sm:gap-3">
+                                <!-- Category Filter -->
+                                <select id="entries-category-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                    <option value="">All Categories</option>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                                <!-- Date Filter -->
+                                <select id="entries-date-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                    <option value="">All Time</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entries Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm" id="all-entries-table">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Date</th>
+                                    <th class="text-left py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Category</th>
+                                    <th class="text-left py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600 hidden sm:table-cell">Expensive</th>
+                                    <th class="text-left py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600 hidden sm:table-cell">Chosen</th>
+                                    <th class="text-right py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Earned</th>
+                                    <th class="text-center py-2 sm:py-3 px-1 sm:px-2 font-medium text-gray-600">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-entries-table-body">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mt-4 sm:mt-6 pt-4 border-t border-gray-200">
+                        <div class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+                            Showing <span id="entries-showing">0</span> of <span id="entries-total">0</span> entries
+                        </div>
+                        <div class="flex items-center justify-center sm:justify-start space-x-2">
+                            <button id="entries-prev-btn" onclick="changePage(-1)" class="px-2 sm:px-3 py-1 text-xs sm:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Prev
+                            </button>
+                            <span id="entries-page-info" class="text-xs sm:text-sm text-gray-600">Page 1 of 1</span>
+                            <button id="entries-next-btn" onclick="changePage(1)" class="px-2 sm:px-3 py-1 text-xs sm:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Entry Modal -->
+    <div id="add-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-slide-up">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-r from-success-500 to-success-600 p-2 rounded-xl">
+                        <i data-lucide="plus" class="h-4 w-4 sm:h-5 sm:w-5 text-white"></i>
+                    </div>
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Add New Earning</h2>
+                </div>
+                <button onclick="closeAddModal()" class="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center">
+                    <i data-lucide="x" class="h-5 w-5 text-gray-500"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="add-entry-form" class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                <!-- Date and Time -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date & Time</label>
+                    <input type="datetime-local" id="entry-datetime" required
+                           class="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                </div>
+
+                <!-- Expensive Option Row -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Expensive Option</label>
+                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                        <input type="text" id="expensive-option" required placeholder="e.g., Burger from restaurant"
+                               class="w-full sm:flex-1 px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                        <input type="number" id="expensive-amount" required placeholder="₹300" min="0" step="0.01"
+                               class="w-full sm:w-24 px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                    </div>
+                </div>
+
+                <!-- Chosen Option Row -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">What You Chose Instead</label>
+                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                        <input type="text" id="chosen-option" required placeholder="e.g., Pakoda from local vendor"
+                               class="w-full sm:flex-1 px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                        <input type="number" id="chosen-amount" required placeholder="₹40" min="0" step="0.01"
+                               class="w-full sm:w-24 px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                    </div>
+                </div>
+
+                <!-- Category Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select id="entry-category" required
+                            class="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 appearance-none bg-white text-base"
+                            onchange="toggleCustomCategory()">
+                        <option value="">Select a category</option>
+                        <option value="food">🍔 Food & Dining</option>
+                        <option value="shopping">🛍️ Shopping & Retail</option>
+                        <option value="transport">🚗 Transportation</option>
+                        <option value="entertainment">🎬 Entertainment</option>
+                        <option value="health">🏥 Health & Wellness</option>
+                        <option value="education">📚 Education & Learning</option>
+                        <option value="utilities">💡 Utilities & Bills</option>
+                        <option value="travel">✈️ Travel & Vacation</option>
+                        <option value="technology">💻 Technology & Gadgets</option>
+                        <option value="clothing">👕 Clothing & Fashion</option>
+                        <option value="home">🏠 Home & Garden</option>
+                        <option value="others">✨ Others (Custom)</option>
+                    </select>
+                    
+                    <!-- Custom Category Input (shown when "Others" is selected) -->
+                    <div id="custom-category-container" class="mt-3 hidden">
+                        <input type="text" id="custom-category" placeholder="Enter custom category name"
+                               class="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-200 text-base">
+                    </div>
+                </div>
+
+                <!-- Earnings Preview -->
+                <div id="earnings-preview" class="bg-gradient-to-r from-earn-50 to-earn-100 border border-earn-200 rounded-xl p-3 sm:p-4 hidden">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="trending-up" class="h-4 w-4 sm:h-5 sm:w-5 text-earn-600"></i>
+                        <span class="text-sm font-medium text-earn-800">You'll earn:</span>
+                    </div>
+                    <div class="text-xl sm:text-2xl font-bold text-earn-900 mt-1" id="preview-amount">₹0</div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full btn-success flex items-center justify-center space-x-2 min-h-[48px]">
+                    <i data-lucide="plus" class="h-4 w-4"></i>
+                    <span>Add Earning</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // AWS Configuration
+        const AWS_CONFIG = {
+            API_BASE_URL: 'https://0zu0t6r210.execute-api.ap-south-1.amazonaws.com/dev',
+            COGNITO: {
+                userPoolId: 'ap-south-1_zybIVZnp4',
+                clientId: '50eekrtr5d8olj5vj3qqokt1jl',
+                region: 'ap-south-1'
+            },
+            REGION: 'ap-south-1'
+        };
+
+        // AWS Integration
+        AWS.config.update({
+            region: AWS_CONFIG.REGION
+        });
+        
+        // Cognito User Pool
+        const cognito = new AWS.CognitoIdentityServiceProvider({
+            region: AWS_CONFIG.REGION
+        });
+        let cognitoUser = null;
+        let authToken = null;
+
+        // AWS API Functions
+        async function callAPI(endpoint, method = 'GET', data = null) {
+            const url = `${AWS_CONFIG.API_BASE_URL}${endpoint}`;
+            
+            // Check if we have a valid token
+            if (!authToken) {
+                console.error('❌ No auth token available');
+                throw new Error('No authentication token. Please login again.');
+            }
+            
+            // Validate token format (basic check)
+            if (!authToken.includes('.') || authToken.length < 100) {
+                console.error('❌ Invalid token format:', { tokenLength: authToken.length, hasJWT: authToken.includes('.') });
+                authToken = null;
+                localStorage.removeItem('savearn-auth-token');
+                throw new Error('Invalid authentication token. Please login again.');
+            }
+            
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            };
+            
+            // Enhanced debugging
+            console.log('🌐 API Call Details:', {
+                url,
+                method,
+                tokenLength: authToken.length,
+                tokenStart: authToken.substring(0, 30) + '...',
+                headers: Object.keys(headers)
+            });
+            
+            const options = {
+                method,
+                headers,
+                mode: 'cors',
+                credentials: 'omit',
+                cache: 'no-cache'
+            };
+            
+            if (data && method !== 'GET') {
+                options.body = JSON.stringify(data);
+                console.log('📤 Request data:', data);
+            }
+            
+            console.log('🚀 Making fetch request...');
+            
+            // Add timeout for API requests to prevent long waits
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout after 3 seconds')), 3000); // Reduced to 3 seconds for faster fallback
+            });
+            
+            try {
+                const response = await Promise.race([fetch(url, options), timeoutPromise]);
+                console.log('📥 Response received:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    console.error('❌ API Error Response:', result);
+                    
+                    // Handle specific error codes
+                    if (response.status === 401) {
+                        console.log('🔄 Unauthorized - clearing auth token');
+                        authToken = null;
+                        localStorage.removeItem('savearn-auth-token');
+                        throw new Error('Session expired. Please login again.');
+                    }
+                    
+                    throw new Error(result.message || `API request failed with status ${response.status}`);
+                }
+                
+                console.log('✅ API Success:', result);
+                return result;
+            } catch (error) {
+                console.error('💥 Fetch Error:', {
+                    name: error.name,
+                    message: error.message,
+                    type: typeof error,
+                    toString: error.toString()
+                });
+                
+                // Re-throw with more specific messages
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    throw new Error('Network connection failed. Please check your internet connection.');
+                } else if (error.message.includes('NetworkError')) {
+                    throw new Error('Network error occurred. Please try again.');
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+        // Debug function to check auth status
+        function checkAuthStatus() {
+            console.log('Auth Status Check:');
+            console.log('- authToken:', authToken ? 'Present' : 'Missing');
+            console.log('- currentUser:', currentUser);
+            console.log('- localStorage token:', localStorage.getItem('savearn-auth-token') ? 'Present' : 'Missing');
+        }
+
+        // Cognito Authentication Functions
+        async function signUp(email, password, name) {
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email,
+                    Password: password,
+                    UserAttributes: [
+                        { Name: 'email', Value: email },
+                        { Name: 'name', Value: name }
+                    ]
+                };
+                
+                const result = await cognito.signUp(params).promise();
+                return result;
+            } catch (error) {
+                console.error('Sign up error:', error);
+                
+                // Provide specific error messages based on AWS error codes
+                let userMessage = 'Failed to create account. Please try again.';
+                
+                if (error.code === 'InvalidPasswordException') {
+                    userMessage = 'Password must be at least 8 characters with uppercase, lowercase, and a number.';
+                } else if (error.code === 'UsernameExistsException') {
+                    userMessage = 'An account with this email already exists.';
+                } else if (error.code === 'InvalidParameterException') {
+                    userMessage = 'Please check your email format and try again.';
+                } else if (error.code === 'LimitExceededException') {
+                    userMessage = 'Too many attempts. Please try again later.';
+                } else if (error.code === 'TooManyRequestsException') {
+                    userMessage = 'Too many requests. Please wait and try again.';
+                }
+                
+                error.userMessage = userMessage;
+                throw error;
+            }
+        }
+
+        async function signIn(email, password) {
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    AuthFlow: 'USER_PASSWORD_AUTH',
+                    AuthParameters: {
+                        USERNAME: email,
+                        PASSWORD: password
+                    }
+                };
+                
+                console.log('🔐 Attempting Cognito login for:', email);
+                const result = await cognito.initiateAuth(params).promise();
+                
+                // Use IdToken for API Gateway Cognito User Pool authorizer (not AccessToken)
+                authToken = result.AuthenticationResult.IdToken;
+                console.log('🎟️ Auth token received:', {
+                    hasToken: !!authToken,
+                    tokenLength: authToken ? authToken.length : 0,
+                    tokenStart: authToken ? authToken.substring(0, 20) + '...' : 'none',
+                    tokenType: 'IdToken'
+                });
+                
+                // Store token for subsequent requests
+                localStorage.setItem('savearn-auth-token', authToken);
+                
+                return result;
+            } catch (error) {
+                console.error('Sign in error:', error);
+                throw error;
+            }
+        }
+
+        function signOut() {
+            authToken = null;
+            cognitoUser = null;
+            localStorage.removeItem('savearn-auth-token');
+            currentUser = null;
+        }
+
+        // Check for existing auth token
+        function checkAuthToken() {
+            const savedToken = localStorage.getItem('savearn-auth-token');
+            if (savedToken) {
+                authToken = savedToken;
+                return true;
+            }
+            return false;
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Data Storage
+        const STORAGE_KEY = 'savearn-data';
+        const USER_KEY = 'savearn-current-user';
+        const USERS_KEY = 'savearn-users';
+        
+        // User Management
+        let currentUser = null;
+        
+        // Categories configuration
+        const CATEGORIES = {
+            food: { name: 'Food & Dining', icon: '🍽️', color: '#EF4444' },
+            shopping: { name: 'Shopping & Retail', icon: '🛍️', color: '#F59E0B' },
+            transport: { name: 'Transportation', icon: '🚗', color: '#3B82F6' },
+            entertainment: { name: 'Entertainment', icon: '🎬', color: '#8B5CF6' },
+            health: { name: 'Health & Wellness', icon: '🏥', color: '#10B981' },
+            education: { name: 'Education & Learning', icon: '📚', color: '#06B6D4' },
+            utilities: { name: 'Utilities & Bills', icon: '💡', color: '#6B7280' },
+            travel: { name: 'Travel & Vacation', icon: '✈️', color: '#EC4899' },
+            technology: { name: 'Technology & Gadgets', icon: '💻', color: '#6366F1' },
+            clothing: { name: 'Clothing & Fashion', icon: '👕', color: '#F97316' },
+            home: { name: 'Home & Garden', icon: '🏠', color: '#84CC16' },
+            general: { name: 'General', icon: '💰', color: '#6B7280' }
+        };
+
+        // App State
+        let appState = {
+            entries: [],
+            totalEarned: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            totalEntries: 0
+        };
+
+        let currentTab = 'overview';
+        let charts = {};
+
+        // Utility Functions
+        function formatCurrency(amount) {
+            if (amount === undefined || amount === null || isNaN(amount)) {
+                return '₹0';
+            }
+            return `₹${Number(amount).toLocaleString()}`;
+        }
+
+        function formatDateTime(datetimeStr) {
+            const datetime = new Date(datetimeStr);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const dateStr = datetime.toDateString();
+            
+            // Format time as HH:MM AM/PM
+            let hours = datetime.getHours();
+            const minutes = datetime.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeStr = `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+
+            if (dateStr === today.toDateString()) {
+                return `Today, ${timeStr}`;
+            } else if (dateStr === yesterday.toDateString()) {
+                return `Yesterday, ${timeStr}`;
+            } else {
+                return `${datetime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${timeStr}`;
+            }
+        }
+
+        function generateId() {
+            return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Helper Functions for Streak Calculation
+        function calculateCurrentStreak(entries) {
+            if (!entries || entries.length === 0) return 0;
+            
+            const sortedEntries = entries.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+            let streak = 0;
+            let currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            
+            for (let entry of sortedEntries) {
+                const entryDate = new Date(entry.datetime);
+                entryDate.setHours(0, 0, 0, 0);
+                
+                const daysDiff = Math.floor((currentDate - entryDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff === streak) {
+                    streak++;
+                } else if (daysDiff > streak) {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        function calculateBestStreak(entries) {
+            if (!entries || entries.length === 0) return 0;
+            
+            const dates = entries.map(entry => {
+                const date = new Date(entry.datetime);
+                date.setHours(0, 0, 0, 0);
+                return date.getTime();
+            });
+            
+            const uniqueDates = [...new Set(dates)].sort();
+            
+            let maxStreak = 0;
+            let currentStreak = 0;
+            
+            for (let i = 0; i < uniqueDates.length; i++) {
+                if (i === 0 || uniqueDates[i] - uniqueDates[i-1] === 24 * 60 * 60 * 1000) {
+                    currentStreak++;
+                    maxStreak = Math.max(maxStreak, currentStreak);
+                } else {
+                    currentStreak = 1;
+                }
+            }
+            
+            return maxStreak;
+        }
+
+        // Message Display Function
+        function showMessage(message, type = 'info') {
+            // Create message element
+            const messageEl = document.createElement('div');
+            messageEl.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 max-w-md ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            messageEl.textContent = message;
+            
+            document.body.appendChild(messageEl);
+            
+            // Auto remove after different durations based on type
+            const duration = type === 'warning' ? 5000 : 3000;
+            setTimeout(() => {
+                messageEl.remove();
+            }, duration);
+        }
+
+        // Data Management
+        async function loadData() {
+            if (!authToken) {
+                // Fallback to localStorage when no AWS token available
+                const userDataKey = `${STORAGE_KEY}-${currentUser.id}`;
+                const savedData = localStorage.getItem(userDataKey);
+                if (savedData) {
+                    try {
+                        appState = JSON.parse(savedData);
+                    } catch (error) {
+                        console.error('Error loading saved data:', error);
+                    }
+                } else {
+                    // Initialize fresh data for new user
+                    appState = {
+                        entries: [],
+                        totalEarned: 0,
+                        currentStreak: 0,
+                        bestStreak: 0,
+                        totalEntries: 0
+                    };
+                }
+                return;
+            }
+
+            try {
+                const result = await callAPI('/earnings');
+                const entries = result.data || [];
+                
+                // Map entryId to id for frontend consistency
+                const mappedEntries = entries.map(entry => ({
+                    ...entry,
+                    id: entry.entryId || entry.id // Use entryId as id, fallback to existing id
+                }));
+                
+                // Calculate aggregated data
+                const totalEarned = mappedEntries.reduce((sum, entry) => sum + entry.earned, 0);
+                const totalEntries = mappedEntries.length;
+                
+                appState = {
+                    entries: mappedEntries,
+                    totalEarned,
+                    currentStreak: calculateCurrentStreak(mappedEntries),
+                    bestStreak: calculateBestStreak(mappedEntries),
+                    totalEntries
+                };
+            } catch (error) {
+                console.error('Error loading data from AWS:', error);
+                
+                // Simple error handling
+                if (error.message === 'Unauthorized') {
+                    showMessage('Session expired. Please login again.', 'error');
+                    signOut();
+                    showAuthPage();
+                    return;
+                }
+                
+                console.log('📱 Loading data from localStorage as fallback');
+                
+                // Fallback to localStorage
+                const userDataKey = `${STORAGE_KEY}-${currentUser.id}`;
+                const savedData = localStorage.getItem(userDataKey);
+                if (savedData) {
+                    try {
+                        appState = JSON.parse(savedData);
+                        console.log('📱 Loaded data from localStorage');
+                    } catch (parseError) {
+                        console.error('Error parsing saved data:', parseError);
+                        appState = {
+                            entries: [],
+                            totalEarned: 0,
+                            currentStreak: 0,
+                            bestStreak: 0,
+                            totalEntries: 0
+                        };
+                    }
+                } else {
+                    appState = {
+                        entries: [],
+                        totalEarned: 0,
+                        currentStreak: 0,
+                        bestStreak: 0,
+                        totalEntries: 0
+                    };
+                }
+            }
+        }
+
+        // Background data loading for faster login experience
+        async function loadDataInBackground() {
+            try {
+                console.log('🔄 Loading fresh data in background...');
+                
+                // Load data from AWS
+                await loadData();
+                
+                // Update UI with actual data
+                updateUI();
+                
+                // Cache the fresh data for next login
+                cacheFreshData();
+                
+                // Hide any loading indicators
+                hideLoadingState();
+                
+                console.log('✅ Background data loading completed');
+            } catch (error) {
+                console.error('❌ Background data loading failed:', error);
+                hideLoadingState();
+                
+                // Only show error if we don't have cached data being displayed
+                if (!appState.entries || appState.entries.length === 0) {
+                    showMessage('Failed to load data. Showing offline mode.', 'warning');
+                }
+            }
+        }
+
+        function showLoadingState() {
+            // This function is now mainly for the skeleton loaders if needed
+            // The main loading is handled by showDataLoadingScreen()
+        }
+
+        function loadCachedData() {
+            if (!currentUser) return null;
+            
+            try {
+                const cacheKey = `${STORAGE_KEY}-cache-${currentUser.id}`;
+                const cachedDataStr = localStorage.getItem(cacheKey);
+                
+                if (cachedDataStr) {
+                    const cachedData = JSON.parse(cachedDataStr);
+                    console.log('📱 Found cached data for instant display');
+                    return cachedData;
+                }
+            } catch (error) {
+                console.error('Error loading cached data:', error);
+            }
+            
+            return null;
+        }
+
+        function cacheFreshData() {
+            if (!currentUser || !appState) return;
+            
+            try {
+                const cacheKey = `${STORAGE_KEY}-cache-${currentUser.id}`;
+                localStorage.setItem(cacheKey, JSON.stringify(appState));
+                console.log('💾 Cached fresh data for next login');
+            } catch (error) {
+                console.error('Error caching data:', error);
+            }
+        }
+
+        function showMinimalLoading() {
+            // Just show small loading indicators instead of full screen
+            const heroEarnings = document.getElementById('hero-earnings');
+            if (heroEarnings) {
+                heroEarnings.innerHTML = '<span class="text-gray-400">Loading...</span>';
+            }
+        }
+
+        function showRefreshingIndicator() {
+            // Show a small, non-intrusive "refreshing" indicator
+            const existingIndicator = document.getElementById('refresh-indicator');
+            if (!existingIndicator) {
+                const indicator = document.createElement('div');
+                indicator.id = 'refresh-indicator';
+                indicator.className = 'fixed top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded text-xs z-50 opacity-75';
+                indicator.innerHTML = '🔄 Refreshing...';
+                document.body.appendChild(indicator);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (indicator.parentNode) {
+                        indicator.parentNode.removeChild(indicator);
+                    }
+                }, 5000);
+            }
+        }
+
+        function hideLoadingState() {
+            // Remove refresh indicator
+            const refreshIndicator = document.getElementById('refresh-indicator');
+            if (refreshIndicator && refreshIndicator.parentNode) {
+                refreshIndicator.parentNode.removeChild(refreshIndicator);
+            }
+            
+            // Remove the data loading screen if it exists
+            const loadingOverlay = document.getElementById('data-loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        function showDataLoadingScreen() {
+            // Create or show a data loading overlay
+            let loadingOverlay = document.getElementById('data-loading-overlay');
+            
+            if (!loadingOverlay) {
+                loadingOverlay = document.createElement('div');
+                loadingOverlay.id = 'data-loading-overlay';
+                loadingOverlay.className = 'fixed inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center z-50';
+                loadingOverlay.innerHTML = `
+                    <div class="text-center">
+                        <div class="bg-gradient-to-r from-primary-500 to-primary-600 p-6 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center animate-pulse">
+                            <i data-lucide="piggy-bank" class="h-12 w-12 text-white"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gradient mb-2">Loading Your Data</h2>
+                        <p class="text-gray-600 mb-4">Fetching your latest earnings...</p>
+                        <div class="flex justify-center space-x-1">
+                            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce"></div>
+                            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-3 h-3 bg-primary-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(loadingOverlay);
+                
+                // Initialize lucide icons for the loading screen
+                setTimeout(() => lucide.createIcons(), 100);
+            } else {
+                loadingOverlay.classList.remove('hidden');
+            }
+        }
+
+        function hideDataLoadingScreen() {
+            const loadingOverlay = document.getElementById('data-loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+                // Don't remove it, just hide it for potential reuse
+            }
+        }
+
+        async function refreshData() {
+            console.log('🔄 Refreshing data from database...');
+            
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = refreshBtn.querySelector('i[data-lucide="refresh-cw"]');
+            
+            // Add spinning animation and disable button
+            refreshIcon.classList.add('animate-spin');
+            refreshBtn.disabled = true;
+            refreshBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            try {
+                // Force reload data from AWS/DynamoDB (skip local cache)
+                await loadData();
+                
+                // Update UI with fresh data
+                updateUI();
+                
+                // Show success message
+                showMessage('Data refreshed successfully!', 'success');
+                
+                console.log('✅ Data refresh completed');
+            } catch (error) {
+                console.error('❌ Failed to refresh data:', error);
+                showMessage('Failed to refresh data. Please try again.', 'error');
+            } finally {
+                // Remove spinning animation and re-enable button
+                setTimeout(() => {
+                    refreshIcon.classList.remove('animate-spin');
+                    refreshBtn.disabled = false;
+                    refreshBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }, 500); // Small delay to show the animation completed
+            }
+        }
+
+        async function saveData() {
+            if (!authToken) {
+                // Fallback to localStorage when no AWS token available
+                const userDataKey = `${STORAGE_KEY}-${currentUser.id}`;
+                localStorage.setItem(userDataKey, JSON.stringify(appState));
+                return;
+            }
+            
+            // For AWS mode, data is saved automatically when creating/updating entries
+            // This function can be used for local caching if needed
+            const userDataKey = `${STORAGE_KEY}-${currentUser.id}`;
+            localStorage.setItem(userDataKey, JSON.stringify(appState));
+        }
+
+        // User Management Functions
+        function getUsers() {
+            console.log('👥 getUsers() called');
+            const usersRaw = localStorage.getItem(USERS_KEY);
+            console.log('👥 Raw users from localStorage:', usersRaw);
+            const users = usersRaw ? JSON.parse(usersRaw) : [];
+            console.log('👥 Parsed users:', users);
+            return users;
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        }
+
+        function getCurrentUser() {
+            console.log('🔍 getCurrentUser() called');
+            const userId = localStorage.getItem(USER_KEY);
+            console.log('🔍 Raw userId from localStorage:', userId);
+            console.log('🔍 USER_KEY:', USER_KEY);
+            
+            if (userId) {
+                const users = getUsers();
+                console.log('🔍 Available users:', users);
+                const foundUser = users.find(u => u.id === userId);
+                console.log('🔍 Found user:', foundUser);
+                return foundUser;
+            }
+            console.log('🔍 No userId found, returning null');
+            return null;
+        }
+
+        function setCurrentUser(user) {
+            console.log('💾 setCurrentUser() called with:', user);
+            currentUser = user;
+            localStorage.setItem(USER_KEY, user.id);
+            console.log('💾 Stored userId in localStorage:', user.id);
+            console.log('💾 USER_KEY:', USER_KEY);
+            document.getElementById('user-name').textContent = user.name;
+        }
+
+        async function login(usernameOrEmail, password) {
+            console.log('🔐 Attempting login for:', usernameOrEmail);
+            
+            try {
+                // Try AWS Cognito first
+                console.log('🌐 Trying AWS Cognito login...');
+                const result = await signIn(usernameOrEmail, password);
+                
+                console.log('✅ AWS Cognito login successful');
+                
+                // Create user object from Cognito response with a proper ID
+                const userId = 'aws-' + usernameOrEmail.replace('@', '-').replace('.', '-'); // Create clean ID
+                const user = {
+                    id: userId, // Use clean user ID instead of token
+                    name: usernameOrEmail.split('@')[0], // Extract name from email
+                    email: usernameOrEmail,
+                    username: usernameOrEmail,
+                    provider: 'aws',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save user to users array if not already exists
+                const users = getUsers();
+                const existingUser = users.find(u => u.id === userId);
+                if (!existingUser) {
+                    users.push(user);
+                    saveUsers(users);
+                    console.log('💾 Saved new AWS user to users array');
+                } else {
+                    console.log('👤 AWS user already exists in users array');
+                }
+                
+                setCurrentUser(user);
+                
+                // Debug: Check auth status
+                checkAuthStatus();
+                
+                // Show main app immediately with loading state
+                showMainApp();
+                showMessage('Welcome back! Logged in with AWS.', 'success');
+                
+                // Load data in background (non-blocking)
+                console.log('🔄 Loading AWS data in background...');
+                loadDataInBackground();
+                
+                return true;
+            } catch (error) {
+                console.error('❌ AWS login failed:', error);
+                console.log('Error details:', {
+                    code: error.code,
+                    message: error.message,
+                    name: error.name,
+                    stack: error.stack
+                });
+                
+                console.log('❌ Login failed completely');
+                
+                // Provide better error messages
+                if (error.code === 'NotAuthorizedException') {
+                    showMessage('Invalid email or password. Please try again.', 'error');
+                } else if (error.code === 'UserNotFoundException') {
+                    showMessage('User not found. Please check your email or sign up.', 'error');
+                } else if (error.code === 'NetworkError' || error.message.includes('fetch')) {
+                    showMessage('Network error. Please check your connection and try again.', 'error');
+                } else {
+                    showMessage('Login failed. Please try again.', 'error');
+                }
+                return false;
+            }
+        }
+
+        async function signup(name, email, username, password) {
+            try {
+                console.log('🚀 Attempting AWS Cognito signup for:', email);
+                
+                // Try AWS Cognito first
+                const result = await signUp(email, password, name);
+                
+                console.log('✅ AWS Cognito signup successful');
+                showMessage('Account created! Please check your email to verify your account.', 'success');
+                
+                // Show verification form
+                showVerificationForm(email);
+                
+                return {
+                    success: true, 
+                    message: 'Account created successfully. Please verify your email before logging in.',
+                    needsVerification: true,
+                    provider: 'aws'
+                };
+            } catch (error) {
+                console.error('❌ AWS signup failed:', error);
+                
+                // Display specific error message to user
+                const errorMessage = error.userMessage || 'Failed to create account. Please try again later.';
+                showMessage(errorMessage, 'error');
+                
+                // Return signup failure
+                return { 
+                    success: false, 
+                    message: errorMessage
+                };
+            }
+        }
+
+        // Password validation function
+        function validatePassword(password) {
+            // Check length (minimum 8 characters)
+            if (password.length < 8) return false;
+            
+            // Check for uppercase letter
+            if (!/[A-Z]/.test(password)) return false;
+            
+            // Check for lowercase letter
+            if (!/[a-z]/.test(password)) return false;
+            
+            // Check for number
+            if (!/\d/.test(password)) return false;
+            
+            return true;
+        }
+
+        function logout() {
+            signOut(); // Clear AWS auth
+            localStorage.removeItem(USER_KEY);
+            currentUser = null;
+            showAuthPage();
+            showMessage('Logged out successfully.', 'success');
+        }
+
+        // Email Verification Functions
+        function showVerificationForm(email) {
+            document.getElementById('verify-email').value = email;
+            hideAllForms();
+            document.getElementById('verification-form').classList.remove('hidden');
+        }
+
+        async function verifyEmail(email, code) {
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email,
+                    ConfirmationCode: code
+                };
+                
+                await cognito.confirmSignUp(params).promise();
+                showMessage('Email verified successfully! You can now login.', 'success');
+                showLoginForm();
+                
+                // Pre-fill login email
+                document.getElementById('login-username').value = email;
+                
+                return true;
+            } catch (error) {
+                console.error('Verification error:', error);
+                if (error.code === 'CodeMismatchException') {
+                    showMessage('Invalid verification code. Please try again.', 'error');
+                } else if (error.code === 'ExpiredCodeException') {
+                    showMessage('Verification code has expired. Please request a new one.', 'error');
+                } else {
+                    showMessage(`Verification failed: ${error.message}`, 'error');
+                }
+                return false;
+            }
+        }
+
+        async function resendVerificationCode() {
+            const email = document.getElementById('verify-email').value;
+            if (!email) {
+                showMessage('Email address is required.', 'error');
+                return;
+            }
+
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email
+                };
+                
+                await cognito.resendConfirmationCode(params).promise();
+                showMessage('Verification code sent! Please check your email.', 'success');
+            } catch (error) {
+                console.error('Resend error:', error);
+                showMessage(`Failed to resend code: ${error.message}`, 'error');
+            }
+        }
+
+        async function forgotPassword(email) {
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email
+                };
+                
+                await cognito.forgotPassword(params).promise();
+                showMessage('Reset code sent to your email!', 'success');
+                return true;
+            } catch (error) {
+                console.error('Forgot password error:', error);
+                if (error.code === 'UserNotFoundException') {
+                    showMessage('No account found with this email address.', 'error');
+                } else if (error.code === 'LimitExceededException') {
+                    showMessage('Too many requests. Please try again later.', 'error');
+                } else {
+                    showMessage(`Failed to send reset code: ${error.message}`, 'error');
+                }
+                throw error;
+            }
+        }
+
+        async function resetPassword(email, code, newPassword) {
+            try {
+                const params = {
+                    ClientId: AWS_CONFIG.COGNITO.clientId,
+                    Username: email,
+                    ConfirmationCode: code,
+                    Password: newPassword
+                };
+                
+                await cognito.confirmForgotPassword(params).promise();
+                showMessage('Password reset successfully!', 'success');
+                return true;
+            } catch (error) {
+                console.error('Reset password error:', error);
+                if (error.code === 'CodeMismatchException') {
+                    showMessage('Invalid reset code. Please try again.', 'error');
+                } else if (error.code === 'ExpiredCodeException') {
+                    showMessage('Reset code has expired. Please request a new one.', 'error');
+                } else if (error.code === 'InvalidPasswordException') {
+                    showMessage('Password does not meet requirements. Use at least 8 characters with letters and numbers.', 'error');
+                } else {
+                    showMessage(`Failed to reset password: ${error.message}`, 'error');
+                }
+                throw error;
+            }
+        }
+
+        function hideAllForms() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('verification-form').classList.add('hidden');
+            document.getElementById('forgot-password-form').classList.add('hidden');
+            document.getElementById('reset-password-form').classList.add('hidden');
+        }
+
+        function showAuthPage() {
+            document.getElementById('loading-screen').classList.add('hidden');
+            document.getElementById('auth-page').classList.remove('hidden');
+            document.getElementById('app').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('loading-screen').classList.add('hidden');
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            
+            // Try to load cached data first for instant display
+            const cachedData = loadCachedData();
+            if (cachedData && cachedData.entries && cachedData.entries.length > 0) {
+                console.log('📱 Using cached data for instant display');
+                appState = cachedData;
+                updateUIFast();
+                // Show a subtle indicator that we're refreshing data
+                showRefreshingIndicator();
+            } else {
+                // Initialize with empty state but skip the loading screen
+                appState = {
+                    entries: [],
+                    totalEarned: 0,
+                    currentStreak: 0,
+                    bestStreak: 0,
+                    totalEntries: 0
+                };
+                updateUIFast();
+                // Show minimal loading indicators only
+                showMinimalLoading();
+            }
+        }
+
+        function showLoginForm() {
+            document.getElementById('loading-screen').classList.add('hidden');
+            document.getElementById('auth-page').classList.remove('hidden');
+            hideAllForms();
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+
+        function showSignupForm() {
+            hideAllForms();
+            document.getElementById('signup-form').classList.remove('hidden');
+        }
+
+        function showForgotPasswordForm() {
+            hideAllForms();
+            document.getElementById('forgot-password-form').classList.remove('hidden');
+        }
+
+        function showResetPasswordForm() {
+            hideAllForms();
+            document.getElementById('reset-password-form').classList.remove('hidden');
+        }
+
+        function calculateStats() {
+            appState.totalEarned = appState.entries.reduce((sum, entry) => sum + entry.earned, 0);
+            appState.totalEntries = appState.entries.length;
+            
+            // Calculate streaks
+            const { current, best } = calculateStreak(appState.entries);
+            appState.currentStreak = current;
+            appState.bestStreak = Math.max(appState.bestStreak, best);
+        }
+
+        function calculateStreak(entries) {
+            if (entries.length === 0) return { current: 0, best: 0 };
+
+            const sortedEntries = [...entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            const today = new Date().toISOString().split('T')[0];
+            const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+            // Group entries by date
+            const entriesByDate = {};
+            sortedEntries.forEach(entry => {
+                if (!entriesByDate[entry.date]) {
+                    entriesByDate[entry.date] = [];
+                }
+                entriesByDate[entry.date].push(entry);
+            });
+
+            const dates = Object.keys(entriesByDate).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+
+            // Calculate current streak
+            let currentStreak = 0;
+            if (entriesByDate[today]) {
+                currentStreak = 1;
+                for (let i = 1; i < dates.length; i++) {
+                    const currentDate = new Date(dates[i-1]);
+                    const prevDate = new Date(dates[i]);
+                    const diffTime = currentDate.getTime() - prevDate.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        currentStreak++;
+                    } else {
+                        break;
+                    }
+                }
+            } else if (entriesByDate[yesterday]) {
+                currentStreak = 1;
+                for (let i = 1; i < dates.length; i++) {
+                    if (dates[i] === yesterday) continue;
+                    const currentDate = new Date(dates[i-1]);
+                    const prevDate = new Date(dates[i]);
+                    const diffTime = currentDate.getTime() - prevDate.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        currentStreak++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            // Calculate best streak
+            let bestStreak = 0;
+            let tempStreak = 1;
+
+            for (let i = 1; i < dates.length; i++) {
+                const currentDate = new Date(dates[i-1]);
+                const prevDate = new Date(dates[i]);
+                const diffTime = currentDate.getTime() - prevDate.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    tempStreak++;
+                } else {
+                    bestStreak = Math.max(bestStreak, tempStreak);
+                    tempStreak = 1;
+                }
+            }
+            bestStreak = Math.max(bestStreak, tempStreak);
+
+            return { current: currentStreak, best: bestStreak };
+        }
+
+        function getTodayEarnings() {
+            const today = new Date().toISOString().split('T')[0];
+            return appState.entries
+                .filter(entry => entry.date === today)
+                .reduce((sum, entry) => sum + entry.earned, 0);
+        }
+
+        function getThisMonthEarnings() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            return appState.entries
+                .filter(entry => {
+                    const entryDate = new Date(entry.date);
+                    return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+                })
+                .reduce((sum, entry) => sum + entry.earned, 0);
+        }
+
+        // UI Functions
+        function updateUI() {
+            calculateStats();
+            updateHeaderStats();
+            updateQuickStats();
+            updateRecentEntries();
+            updateCharts();
+            saveData();
+        }
+
+        // Fast UI update without heavy operations (for login optimization)
+        function updateUIFast() {
+            calculateStats();
+            updateHeaderStats();
+            updateQuickStats();
+            updateRecentEntries();
+            // Skip charts initially for faster rendering
+            saveData();
+        }
+
+        function updateHeaderStats() {
+            document.getElementById('total-earned').textContent = `${formatCurrency(appState.totalEarned)} Total Earned`;
+            document.getElementById('hero-earnings').textContent = formatCurrency(appState.totalEarned);
+        }
+
+        function updateQuickStats() {
+            document.getElementById('today-earnings').textContent = formatCurrency(getTodayEarnings());
+            document.getElementById('month-earnings').textContent = formatCurrency(getThisMonthEarnings());
+            document.getElementById('current-streak').textContent = appState.currentStreak;
+            document.getElementById('total-entries').textContent = appState.totalEntries;
+        }
+
+        function updateRecentEntries() {
+            const container = document.getElementById('recent-entries');
+            const recentEntries = [...appState.entries]
+                .sort((a, b) => new Date(b.datetime || b.date).getTime() - new Date(a.datetime || a.date).getTime())
+                .slice(0, 5);
+
+            if (recentEntries.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-gray-400 mb-4">
+                            <i data-lucide="trending-up" class="h-16 w-16 mx-auto"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-600 mb-2">No earnings yet</h3>
+                        <p class="text-gray-500">Start making smart choices and watch your earnings grow!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = recentEntries.map(entry => {
+                const displayTime = formatDateTime(entry.datetime || entry.date + 'T12:00:00');
+                return `
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:shadow-md transition-all duration-200 hover-scale">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <div class="text-2xl">💰</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="text-sm font-medium text-gray-600">${displayTime}</span>
+                                    </div>
+                                    
+                                    <div class="text-sm text-gray-800 mb-2">
+                                        <span class="font-medium">Instead of:</span> ${entry.expensiveOption} (${formatCurrency(entry.expensiveAmount)})
+                                    </div>
+                                    
+                                    <div class="text-sm text-gray-800 mb-2">
+                                        <span class="font-medium">You chose:</span> ${entry.chosenOption} (${formatCurrency(entry.chosenAmount)})
+                                    </div>
+                                    
+                                    ${entry.description ? `<div class="text-xs text-gray-600 italic">${entry.description}</div>` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 ml-4">
+                                <div class="text-right">
+                                    <div class="text-lg font-bold text-earn-600">+${formatCurrency(entry.earned)}</div>
+                                    <div class="text-xs text-gray-500">earned</div>
+                                </div>
+                                
+                                <button onclick="deleteEntry('${entry.id}')" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200" title="Delete entry">
+                                    <i data-lucide="trash-2" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function updateCharts() {
+            console.log('📊 [updateCharts] Starting chart updates...');
+            console.log('📊 [updateCharts] Current tab:', currentTab);
+            console.log('📊 [updateCharts] Chart.js available:', typeof Chart !== 'undefined');
+            console.log('📊 [updateCharts] Entries count:', appState.entries.length);
+            
+            if (currentTab !== 'analytics') {
+                console.log('📊 [updateCharts] Not on analytics tab, skipping');
+                return;
+            }
+
+            if (typeof Chart === 'undefined') {
+                console.error('📊 [updateCharts] Chart.js not loaded!');
+                return;
+            }
+
+            try {
+                initializeMonthSelector();
+                const selectedMonth = getSelectedMonth();
+                const dailyStats = getDailyStats(selectedMonth.year, selectedMonth.month);
+                const categoryStats = getCategoryStats();
+                const monthlyStats = getMonthlyStats();
+                
+                console.log('📊 [updateCharts] Stats generated:', {
+                    dailyStats: dailyStats.length,
+                    categoryStats: categoryStats.length,
+                    monthlyStats: monthlyStats.length
+                });
+
+                updateDailyChart(dailyStats);
+                updateCategoryChart(categoryStats);
+                updateMonthlyChart(monthlyStats);
+                updateCategoryTable(categoryStats);
+                
+                console.log('📊 [updateCharts] Charts updated successfully');
+            } catch (error) {
+                console.error('📊 [updateCharts] Error updating charts:', error);
+            }
+        }
+
+        function getDailyStats(year = null, month = null) {
+            // Use current month if not specified
+            const now = new Date();
+            const targetYear = year || now.getFullYear();
+            const targetMonth = month !== null ? month : now.getMonth(); // 0-based month
+            
+            // Get all days in the target month
+            const daysInMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+            const monthlyStats = [];
+            
+            // Generate all days of the month with 0 earnings by default
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${targetYear}-${(targetMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                
+                monthlyStats.push({
+                    date: dateStr,
+                    totalEarned: 0,
+                    entriesCount: 0,
+                });
+            }
+            
+            // Add actual earnings data to the corresponding dates
+            appState.entries.forEach(entry => {
+                const entryDate = new Date(entry.date);
+                if (entryDate.getFullYear() === targetYear && entryDate.getMonth() === targetMonth) {
+                    const dayIndex = entryDate.getDate() - 1; // 0-based index
+                    if (monthlyStats[dayIndex]) {
+                        monthlyStats[dayIndex].totalEarned += entry.earned;
+                        monthlyStats[dayIndex].entriesCount += 1;
+                    }
+                }
+            });
+
+            return monthlyStats;
+        }
+
+        function getCategoryStats() {
+            const statsMap = new Map();
+            
+            appState.entries.forEach(entry => {
+                if (statsMap.has(entry.category)) {
+                    const existing = statsMap.get(entry.category);
+                    statsMap.set(entry.category, {
+                        totalEarned: existing.totalEarned + entry.earned,
+                        count: existing.count + 1,
+                    });
+                } else {
+                    statsMap.set(entry.category, {
+                        totalEarned: entry.earned,
+                        count: 1,
+                    });
+                }
+            });
+
+            const total = appState.totalEarned;
+            return Array.from(statsMap.entries()).map(([category, stats]) => ({
+                category,
+                totalEarned: stats.totalEarned,
+                count: stats.count,
+                percentage: total > 0 ? (stats.totalEarned / total) * 100 : 0,
+            })).sort((a, b) => b.totalEarned - a.totalEarned);
+        }
+
+        function getMonthlyStats() {
+            const statsMap = new Map();
+            
+            appState.entries.forEach(entry => {
+                const date = new Date(entry.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                const monthLabel = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+                
+                if (statsMap.has(monthKey)) {
+                    const existing = statsMap.get(monthKey);
+                    statsMap.set(monthKey, {
+                        month: monthLabel,
+                        totalEarned: existing.totalEarned + entry.earned,
+                        entriesCount: existing.entriesCount + 1,
+                    });
+                } else {
+                    statsMap.set(monthKey, {
+                        month: monthLabel,
+                        totalEarned: entry.earned,
+                        entriesCount: 1,
+                    });
+                }
+            });
+
+            return Array.from(statsMap.values())
+                .sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
+        }
+
+        function updateDailyChart(dailyStats) {
+            console.log('📊 [updateDailyChart] Updating daily chart with', dailyStats.length, 'data points');
+            
+            const canvas = document.getElementById('daily-chart');
+            if (!canvas) {
+                console.error('📊 [updateDailyChart] Canvas element not found');
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            if (charts.daily) {
+                charts.daily.destroy();
+            }
+
+            if (dailyStats.length === 0) {
+                console.log('📊 [updateDailyChart] No data available, showing placeholder');
+                // Clear canvas and show no data message
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#6B7280';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('No earnings data available', canvas.width / 2, canvas.height / 2);
+                ctx.fillText('Add some entries to see your progress!', canvas.width / 2, canvas.height / 2 + 25);
+                return;
+            }
+
+            try {
+                charts.daily = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dailyStats.map(stat => {
+                            // Extract day from date string (YYYY-MM-DD format)
+                            const day = stat.date.split('-')[2];
+                            return parseInt(day).toString(); // Remove leading zero and convert back to string
+                        }),
+                        datasets: [{
+                            label: 'Daily Earnings',
+                            data: dailyStats.map(stat => stat.totalEarned),
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            borderColor: 'rgba(34, 197, 94, 1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                cornerRadius: 8,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return '₹' + context.parsed.y.toFixed(2);
+                                    }
+                                }
+                            },
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false,
+                                },
+                                ticks: {
+                                    color: '#6B7280',
+                                },
+                            },
+                            y: {
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)',
+                                },
+                                ticks: {
+                                    color: '#6B7280',
+                                    callback: function(value) {
+                                        return '₹' + value;
+                                    },
+                                },
+                            },
+                        },
+                    },
+                });
+                console.log('📊 [updateDailyChart] Daily chart created successfully');
+            } catch (error) {
+                console.error('📊 [updateDailyChart] Error creating chart:', error);
+            }
+        }
+
+        function updateCategoryChart(categoryStats) {
+            console.log('📊 [updateCategoryChart] Updating category chart with', categoryStats.length, 'categories');
+            
+            const canvas = document.getElementById('category-chart');
+            if (!canvas) {
+                console.error('📊 [updateCategoryChart] Canvas element not found');
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            if (charts.category) {
+                charts.category.destroy();
+            }
+
+            if (categoryStats.length === 0) {
+                console.log('📊 [updateCategoryChart] No data available, showing placeholder');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#6B7280';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('No category data available', canvas.width / 2, canvas.height / 2);
+                ctx.fillText('Add some entries to see category breakdown!', canvas.width / 2, canvas.height / 2 + 25);
+                return;
+            }
+
+            try {
+                // Use proper category names and colors from CATEGORIES mapping
+                const categoryNames = categoryStats.map(stat => {
+                    const category = CATEGORIES[stat.category];
+                    if (category) {
+                        return `${category.icon} ${category.name}`;
+                    }
+                    return stat.category || 'General';
+                });
+                
+                const categoryColors = categoryStats.map((stat, index) => {
+                    const category = CATEGORIES[stat.category];
+                    return category ? category.color : [
+                        '#3B82F6', '#10B981', '#F59E0B', '#EF4444', 
+                        '#8B5CF6', '#06B6D4', '#6B7280'
+                    ][index % 7];
+                });
+                
+                charts.category = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categoryNames,
+                        datasets: [{
+                            data: categoryStats.map(stat => stat.totalEarned),
+                            backgroundColor: categoryColors,
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 12,
+                                    },
+                                },
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                cornerRadius: 8,
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = categoryStats.reduce((sum, stat) => sum + stat.totalEarned, 0);
+                                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                        return `${label}: ₹${value.toFixed(2)} (${percentage}%)`;
+                                    }
+                                }
+                            },
+                        },
+                        cutout: '60%',
+                    },
+                });
+                console.log('📊 [updateCategoryChart] Category chart created successfully');
+            } catch (error) {
+                console.error('📊 [updateCategoryChart] Error creating chart:', error);
+            }
+        }
+
+        function updateMonthlyChart(monthlyStats) {
+            console.log('📊 [updateMonthlyChart] Updating monthly chart with', monthlyStats.length, 'months');
+            
+            const canvas = document.getElementById('monthly-chart');
+            if (!canvas) {
+                console.error('📊 [updateMonthlyChart] Canvas element not found');
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            if (charts.monthly) {
+                charts.monthly.destroy();
+            }
+
+            if (monthlyStats.length === 0) {
+                console.log('📊 [updateMonthlyChart] No data available, showing placeholder');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#6B7280';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('No monthly data available', canvas.width / 2, canvas.height / 2);
+                ctx.fillText('Add entries over time to see trends!', canvas.width / 2, canvas.height / 2 + 25);
+                return;
+            }
+
+            try {
+                charts.monthly = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: monthlyStats.map(stat => stat.month),
+                        datasets: [{
+                            label: 'Monthly Earnings',
+                            data: monthlyStats.map(stat => stat.totalEarned),
+                            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                            borderColor: 'rgba(99, 102, 241, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                cornerRadius: 8,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return '₹' + context.parsed.y.toFixed(2);
+                                    }
+                                }
+                            },
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false,
+                                },
+                                ticks: {
+                                    color: '#6B7280',
+                                },
+                            },
+                            y: {
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)',
+                                },
+                                ticks: {
+                                    color: '#6B7280',
+                                    callback: function(value) {
+                                        return '₹' + value;
+                                    },
+                                },
+                            },
+                        },
+                    },
+                });
+                console.log('📊 [updateMonthlyChart] Monthly chart created successfully');
+            } catch (error) {
+                console.error('📊 [updateMonthlyChart] Error creating chart:', error);
+            }
+        }
+
+        function updateCategoryTable(categoryStats) {
+            console.log('📊 [updateCategoryTable] Updating category table with', categoryStats.length, 'categories');
+            
+            const tbody = document.getElementById('category-table-body');
+            if (!tbody) {
+                console.error('📊 [updateCategoryTable] Table body element not found');
+                return;
+            }
+            
+            if (categoryStats.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500">
+                            <i data-lucide="bar-chart-3" class="h-8 w-8 mx-auto mb-2 opacity-50"></i>
+                            <div>No category data available</div>
+                            <div class="text-sm">Add some entries to see breakdown!</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            try {
+                tbody.innerHTML = categoryStats.map(stat => {
+                    const category = CATEGORIES[stat.category] || { name: stat.category || 'General', icon: '💰' };
+                    
+                    return `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">${category.icon}</span>
+                                    <span class="font-medium text-gray-900">${category.name}</span>
+                                </div>
+                            </td>
+                            <td class="text-right py-3 px-2 font-semibold text-earn-600">
+                                ${formatCurrency(stat.totalEarned)}
+                            </td>
+                            <td class="text-right py-3 px-2 text-gray-600">
+                                ${stat.count}
+                            </td>
+                            <td class="text-right py-3 px-2 text-gray-600">
+                                ${stat.percentage.toFixed(2)}%
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                console.log('📊 [updateCategoryTable] Table updated successfully');
+            } catch (error) {
+                console.error('📊 [updateCategoryTable] Error updating table:', error);
+            }
+        }
+
+        // Month Selector Functions
+        function initializeMonthSelector() {
+            const selector = document.getElementById('month-selector');
+            if (!selector) return;
+            
+            // Generate last 12 months
+            const options = [];
+            const now = new Date();
+            
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                
+                options.push({
+                    value: `${year}-${month}`,
+                    text: monthName,
+                    isSelected: i === 0 // Current month selected by default
+                });
+            }
+            
+            selector.innerHTML = options.map(option => 
+                `<option value="${option.value}" ${option.isSelected ? 'selected' : ''}>${option.text}</option>`
+            ).join('');
+            
+            // Add event listener for month changes
+            selector.addEventListener('change', onMonthSelectorChange);
+        }
+
+        function getSelectedMonth() {
+            const selector = document.getElementById('month-selector');
+            if (!selector || !selector.value) {
+                const now = new Date();
+                return { year: now.getFullYear(), month: now.getMonth() };
+            }
+            
+            const [year, month] = selector.value.split('-').map(Number);
+            return { year, month };
+        }
+
+        function onMonthSelectorChange() {
+            console.log('📊 [onMonthSelectorChange] Month changed, updating daily chart...');
+            const selectedMonth = getSelectedMonth();
+            const dailyStats = getDailyStats(selectedMonth.year, selectedMonth.month);
+            updateDailyChart(dailyStats);
+        }
+
+        // All Entries View Functions
+        let currentEntriesPage = 1;
+        const entriesPerPage = 20;
+        let filteredEntries = [];
+
+        function initializeEntriesView() {
+            console.log('📊 [initializeEntriesView] Initializing entries view...');
+            populateCategoryFilter();
+            setupEntriesFilters();
+            currentEntriesPage = 1;
+            filterAndDisplayEntries();
+        }
+
+        function populateCategoryFilter() {
+            const select = document.getElementById('entries-category-filter');
+            const categories = [...new Set(appState.entries.map(entry => entry.category).filter(Boolean))];
+            
+            // Keep the "All Categories" option and add actual categories
+            const categoryOptions = categories.map(categoryKey => {
+                const category = CATEGORIES[categoryKey] || { name: categoryKey, icon: '💰' };
+                return `<option value="${categoryKey}">${category.icon} ${category.name}</option>`;
+            }).join('');
+            
+            select.innerHTML = '<option value="">All Categories</option>' + categoryOptions;
+        }
+
+        function setupEntriesFilters() {
+            // Search filter
+            document.getElementById('entries-search').addEventListener('input', filterAndDisplayEntries);
+            
+            // Category filter
+            document.getElementById('entries-category-filter').addEventListener('change', filterAndDisplayEntries);
+            
+            // Date filter
+            document.getElementById('entries-date-filter').addEventListener('change', filterAndDisplayEntries);
+        }
+
+        function filterAndDisplayEntries() {
+            const searchTerm = document.getElementById('entries-search').value.toLowerCase();
+            const categoryFilter = document.getElementById('entries-category-filter').value;
+            const dateFilter = document.getElementById('entries-date-filter').value;
+            
+            // Start with all entries
+            filteredEntries = [...appState.entries];
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredEntries = filteredEntries.filter(entry => 
+                    entry.expensiveOption.toLowerCase().includes(searchTerm) ||
+                    entry.chosenOption.toLowerCase().includes(searchTerm) ||
+                    (entry.category && CATEGORIES[entry.category]?.name.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            // Apply category filter
+            if (categoryFilter) {
+                filteredEntries = filteredEntries.filter(entry => entry.category === categoryFilter);
+            }
+            
+            // Apply date filter
+            if (dateFilter) {
+                const now = new Date();
+                let startDate;
+                
+                switch (dateFilter) {
+                    case 'today':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        break;
+                    case 'week':
+                        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        break;
+                    case 'month':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                        break;
+                    case 'year':
+                        startDate = new Date(now.getFullYear(), 0, 1);
+                        break;
+                }
+                
+                if (startDate) {
+                    filteredEntries = filteredEntries.filter(entry => 
+                        new Date(entry.date) >= startDate
+                    );
+                }
+            }
+            
+            // Sort by date (newest first)
+            filteredEntries.sort((a, b) => 
+                new Date(b.datetime || b.date).getTime() - new Date(a.datetime || a.date).getTime()
+            );
+            
+            // Reset to first page
+            currentEntriesPage = 1;
+            displayEntriesPage();
+        }
+
+        function displayEntriesPage() {
+            const startIndex = (currentEntriesPage - 1) * entriesPerPage;
+            const endIndex = startIndex + entriesPerPage;
+            const pageEntries = filteredEntries.slice(startIndex, endIndex);
+            
+            const tbody = document.getElementById('all-entries-table-body');
+            
+            if (pageEntries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-12">
+                            <div class="text-gray-400 mb-2">
+                                <i data-lucide="inbox" class="h-12 w-12 mx-auto mb-4 opacity-50"></i>
+                                <div class="text-lg font-medium">No entries found</div>
+                                <div class="text-sm">Try adjusting your search or filters</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                updatePaginationInfo();
+                return;
+            }
+            
+            tbody.innerHTML = pageEntries.map(entry => {
+                const category = CATEGORIES[entry.category] || { name: entry.category || 'General', icon: '💰' };
+                const entryDate = new Date(entry.datetime || entry.date);
+                const formattedDate = entryDate.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: entryDate.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+                });
+                
+                return `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-2 text-sm text-gray-900">${formattedDate}</td>
+                        <td class="py-3 px-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm">${category.icon}</span>
+                                <span class="text-sm text-gray-900">${category.name}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-2 text-sm text-gray-900">${entry.expensiveOption}</td>
+                        <td class="py-3 px-2 text-sm text-gray-900">${entry.chosenOption}</td>
+                        <td class="py-3 px-2 text-right">
+                            <span class="text-sm font-semibold text-earn-600">${formatCurrency(entry.earned)}</span>
+                        </td>
+                        <td class="py-3 px-2 text-center">
+                            <button onclick="deleteEntry('${entry.id}')" 
+                                    class="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-all duration-200" 
+                                    title="Delete entry">
+                                <i data-lucide="trash-2" class="h-4 w-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+            updatePaginationInfo();
+        }
+
+        function updatePaginationInfo() {
+            const total = filteredEntries.length;
+            const startIndex = (currentEntriesPage - 1) * entriesPerPage;
+            const endIndex = Math.min(startIndex + entriesPerPage, total);
+            const totalPages = Math.ceil(total / entriesPerPage);
+            
+            document.getElementById('entries-showing').textContent = total === 0 ? '0' : `${startIndex + 1}-${endIndex}`;
+            document.getElementById('entries-total').textContent = total;
+            document.getElementById('entries-page-info').textContent = `Page ${currentEntriesPage} of ${totalPages || 1}`;
+            
+            // Update button states
+            document.getElementById('entries-prev-btn').disabled = currentEntriesPage <= 1;
+            document.getElementById('entries-next-btn').disabled = currentEntriesPage >= totalPages;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredEntries.length / entriesPerPage);
+            const newPage = currentEntriesPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentEntriesPage = newPage;
+                displayEntriesPage();
+            }
+        }
+
+        // Modal Functions
+        function openAddModal() {
+            document.getElementById('add-modal').classList.remove('hidden');
+            
+            // Set current date and time (without seconds)
+            const now = new Date();
+            // Round to nearest minute to remove seconds and milliseconds
+            now.setSeconds(0, 0);
+            const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            document.getElementById('entry-datetime').value = localDateTime;
+            
+            updateEarningsPreview();
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').classList.add('hidden');
+            document.getElementById('add-entry-form').reset();
+            document.getElementById('earnings-preview').classList.add('hidden');
+            document.getElementById('custom-category-container').classList.add('hidden');
+        }
+
+        function toggleCustomCategory() {
+            const categorySelect = document.getElementById('entry-category');
+            const customContainer = document.getElementById('custom-category-container');
+            const customInput = document.getElementById('custom-category');
+            
+            if (categorySelect.value === 'others') {
+                customContainer.classList.remove('hidden');
+                customInput.required = true;
+                customInput.focus();
+            } else {
+                customContainer.classList.add('hidden');
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
+        function updateEarningsPreview() {
+            const expensiveAmount = parseFloat(document.getElementById('expensive-amount').value) || 0;
+            const chosenAmount = parseFloat(document.getElementById('chosen-amount').value) || 0;
+            const earned = expensiveAmount - chosenAmount;
+            
+            const preview = document.getElementById('earnings-preview');
+            const previewAmount = document.getElementById('preview-amount');
+            
+            if (earned > 0 && expensiveAmount > 0 && chosenAmount >= 0) {
+                previewAmount.textContent = formatCurrency(earned);
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+
+        // Tab Functions
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.getElementById('overview-tab').className = tab === 'overview' 
+                ? 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 bg-primary-600 text-white shadow-lg'
+                : 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 text-gray-600 hover:text-primary-600';
+
+            document.getElementById('entries-tab').className = tab === 'entries'
+                ? 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 bg-primary-600 text-white shadow-lg'
+                : 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 text-gray-600 hover:text-primary-600';
+                
+            document.getElementById('analytics-tab').className = tab === 'analytics'
+                ? 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 bg-primary-600 text-white shadow-lg'
+                : 'px-6 py-3 rounded-xl font-semibold transition-all duration-200 text-gray-600 hover:text-primary-600';
+            
+            // Update content visibility
+            document.getElementById('overview-content').classList.toggle('hidden', tab !== 'overview');
+            document.getElementById('entries-content').classList.toggle('hidden', tab !== 'entries');
+            document.getElementById('analytics-content').classList.toggle('hidden', tab !== 'analytics');
+            
+            if (tab === 'analytics') {
+                // Delay chart updates to ensure proper rendering
+                setTimeout(() => {
+                    updateCharts();
+                }, 100);
+            } else if (tab === 'entries') {
+                // Initialize entries view
+                setTimeout(() => {
+                    initializeEntriesView();
+                }, 100);
+            }
+        }
+
+        // Entry Management
+        async function addEntry(entryData) {
+            console.log('💾 addEntry called with authToken status:', {
+                hasAuthToken: !!authToken,
+                tokenLength: authToken ? authToken.length : 0,
+                localStorageToken: localStorage.getItem('savearn-auth-token') ? 'Present' : 'Missing'
+            });
+            
+            // If no authToken but token in localStorage, try to restore it
+            if (!authToken && localStorage.getItem('savearn-auth-token')) {
+                console.log('🔄 Attempting to restore authToken from localStorage...');
+                const restored = checkAuthToken();
+                console.log('🔄 Token restoration result:', restored, 'authToken now:', !!authToken);
+            }
+            
+            if (!authToken) {
+                console.log('⚠️ No authToken - falling back to localStorage mode');
+                // Fallback to localStorage when no AWS token available
+                const entry = {
+                    id: generateId(),
+                    datetime: entryData.datetime,
+                    date: entryData.datetime.split('T')[0],
+                    category: entryData.category || 'general',
+                    expensiveOption: entryData.expensiveOption,
+                    expensiveAmount: entryData.expensiveAmount,
+                    chosenOption: entryData.chosenOption,
+                    chosenAmount: entryData.chosenAmount,
+                    earned: entryData.expensiveAmount - entryData.chosenAmount,
+                };
+                
+                appState.entries.push(entry);
+                saveData();
+                updateUI();
+                return;
+            }
+
+            try {
+                const apiData = {
+                    datetime: entryData.datetime,
+                    expensiveOption: entryData.expensiveOption,
+                    expensiveAmount: entryData.expensiveAmount,
+                    chosenOption: entryData.chosenOption,
+                    chosenAmount: entryData.chosenAmount,
+                    category: entryData.category || 'general'
+                };
+
+                const result = await callAPI('/earnings', 'POST', apiData);
+                
+                // Add to local state - extract the actual entry data from API response
+                const entryFromAPI = result.data || result; // Handle both {data: entry} and direct entry formats
+                
+                // Map entryId to id for frontend consistency
+                if (entryFromAPI.entryId && !entryFromAPI.id) {
+                    entryFromAPI.id = entryFromAPI.entryId;
+                }
+                
+                appState.entries.push(entryFromAPI);
+                saveData(); // Cache locally
+                updateUI();
+                
+                showMessage('Entry saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error adding entry:', error);
+                
+                // Check if it's a network error that we can handle with local fallback
+                if (error.message.includes('Network connection failed') || 
+                    error.message.includes('Failed to fetch')) {
+                    
+                    console.log('💾 Network issue detected - saving entry locally as fallback');
+                    
+                    // Save locally as fallback
+                    const localEntry = {
+                        id: generateId(),
+                        datetime: entryData.datetime,
+                        date: entryData.datetime.split('T')[0],
+                        category: 'general',
+                        expensiveOption: entryData.expensiveOption,
+                        expensiveAmount: entryData.expensiveAmount,
+                        chosenOption: entryData.chosenOption,
+                        chosenAmount: entryData.chosenAmount,
+                        earned: entryData.expensiveAmount - entryData.chosenAmount,
+                        description: entryData.description || '',
+                        syncStatus: 'pending' // Mark for later sync
+                    };
+                    
+                    appState.entries.push(localEntry);
+                    saveData();
+                    updateUI();
+                    showMessage('Entry saved locally due to connection issue. Will sync when online.', 'warning');
+                    return;
+                }
+                
+                // Handle auth errors
+                if (error.message === 'Unauthorized') {
+                    showMessage('Session expired. Please login again.', 'error');
+                    signOut();
+                    showAuthPage();
+                    return;
+                } 
+                
+                // For other errors, show the specific message
+                showMessage(`Failed to save entry: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteEntry(id) {
+            console.log('🗑️ [deleteEntry] Starting deletion for ID:', id);
+            console.log('🗑️ [deleteEntry] authToken status:', authToken ? 'Present' : 'Missing/Null');
+            
+            if (!confirm('Are you sure you want to delete this entry?')) {
+                return;
+            }
+
+            // If no authToken but token in localStorage, try to restore it
+            if (!authToken && localStorage.getItem('savearn-auth-token')) {
+                console.log('🔄 [deleteEntry] Attempting to restore authToken from localStorage...');
+                const restored = checkAuthToken();
+                console.log('🔄 [deleteEntry] Token restoration result:', restored, 'authToken now:', !!authToken);
+            }
+
+            if (!authToken) {
+                console.log('⚠️ [deleteEntry] No authToken - using localStorage mode');
+                // Fallback to localStorage when no AWS token available
+                appState.entries = appState.entries.filter(entry => entry.id !== id);
+                saveData();
+                updateUI();
+                showMessage('Entry deleted successfully!', 'success');
+                return;
+            }
+
+            try {
+                console.log('🌐 [deleteEntry] Making API call to delete entry...');
+                
+                // Find the entry to get the entryId for API call
+                const entryToDelete = appState.entries.find(entry => entry.id === id);
+                const apiId = entryToDelete?.entryId || id; // Use entryId for API, fallback to id
+                console.log('🔍 [deleteEntry] Using API ID:', apiId, 'for frontend ID:', id);
+                
+                await callAPI(`/earnings/${apiId}`, 'DELETE');
+                console.log('✅ [deleteEntry] API call successful');
+                
+                // Remove from local state - use consistent ID field
+                const beforeCount = appState.entries.length;
+                appState.entries = appState.entries.filter(entry => entry.id !== id);
+                const afterCount = appState.entries.length;
+                console.log('🗑️ [deleteEntry] Removed from local state:', beforeCount - afterCount, 'entries');
+                
+                saveData(); // Update cache
+                updateUI();
+                
+                showMessage('Entry deleted successfully!', 'success');
+            } catch (error) {
+                console.error('❌ [deleteEntry] Error deleting entry:', error);
+                showMessage('Failed to delete entry. Please try again.', 'error');
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('login-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Signing in...';
+            submitBtn.disabled = true;
+            
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            console.log('🔑 [Login Form] Attempting login for:', username);
+            
+            try {
+                const success = await login(username, password);
+                if (!success) {
+                    console.log('❌ [Login Form] Login returned false');
+                    showMessage('Login failed. Please check your credentials.', 'error');
+                }
+            } catch (error) {
+                console.error('❌ [Login Form] Login error:', error);
+                
+                // Show specific error messages based on error type
+                if (error.code === 'NotAuthorizedException') {
+                    showMessage('Invalid username or password.', 'error');
+                } else if (error.code === 'UserNotFoundException') {
+                    showMessage('User not found. Please check your email address.', 'error');
+                } else if (error.code === 'NetworkError' || error.message.includes('fetch')) {
+                    showMessage('Network error. Please check your connection.', 'error');
+                } else {
+                    showMessage(`Login failed: ${error.message}`, 'error');
+                }
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('signup-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating account...';
+            submitBtn.disabled = true;
+            
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            
+            // Client-side password validation
+            if (!validatePassword(password)) {
+                showMessage('Password must be at least 8 characters with uppercase, lowercase, and a number.', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            try {
+                const result = await signup(name, email, username, password);
+                if (!result.success) {
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMessage('Failed to create account. Please try again.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('verification-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Verifying...';
+            submitBtn.disabled = true;
+            
+            const email = document.getElementById('verify-email').value;
+            const code = document.getElementById('verify-code').value;
+            
+            try {
+                await verifyEmail(email, code);
+            } catch (error) {
+                console.error('Verification error:', error);
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('add-entry-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+            
+            // Get category value
+            const categorySelect = document.getElementById('entry-category').value;
+            const customCategory = document.getElementById('custom-category').value;
+            const finalCategory = categorySelect === 'others' ? (customCategory || 'general') : (categorySelect || 'general');
+            
+            const formData = {
+                datetime: document.getElementById('entry-datetime').value,
+                expensiveOption: document.getElementById('expensive-option').value,
+                expensiveAmount: parseFloat(document.getElementById('expensive-amount').value),
+                chosenOption: document.getElementById('chosen-option').value,
+                chosenAmount: parseFloat(document.getElementById('chosen-amount').value),
+                category: finalCategory,
+            };
+            
+            // Validation
+            if (formData.chosenAmount >= formData.expensiveAmount) {
+                showMessage('Chosen amount should be less than expensive option', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            try {
+                await addEntry(formData);
+                closeAddModal();
+            } catch (error) {
+                console.error('Add entry error:', error);
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Update earnings preview on input change
+        document.getElementById('expensive-amount').addEventListener('input', updateEarningsPreview);
+        document.getElementById('chosen-amount').addEventListener('input', updateEarningsPreview);
+
+        // Close modal when clicking outside
+        document.getElementById('add-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddModal();
+            }
+        });
+
+        // Forgot Password Form Handler
+        document.getElementById('forgot-password-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            const email = document.getElementById('forgot-email').value;
+            
+            try {
+                await forgotPassword(email);
+                showResetPasswordForm();
+                showMessage('Reset code sent to your email!', 'success');
+            } catch (error) {
+                console.error('Forgot password error:', error);
+                showMessage(error.message || 'Failed to send reset code', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Reset Password Form Handler
+        document.getElementById('reset-password-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Resetting...';
+            submitBtn.disabled = true;
+            
+            const email = document.getElementById('forgot-email').value;
+            const code = document.getElementById('reset-code').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                showMessage('Password must be at least 8 characters', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            try {
+                await resetPassword(email, code, newPassword);
+                showLoginForm();
+                showMessage('Password reset successfully! Please login with your new password.', 'success');
+            } catch (error) {
+                console.error('Reset password error:', error);
+                showMessage(error.message || 'Failed to reset password', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Initialize App
+        async function initApp() {
+            console.log('🚀 Initializing SavEarn app...');
+            console.log('📦 App Version: DynamoDB-RESTORED-v2.0 (with proper auth)');
+            console.log('🌐 Environment:', {
+                userAgent: navigator.userAgent,
+                isMobile: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent),
+                awsConfigured: !!AWS_CONFIG.API_BASE_URL
+            });
+            
+            // Debug: Check localStorage state at start
+            console.log('🔍 LocalStorage state at initApp start:');
+            console.log('- AUTH TOKEN:', localStorage.getItem('savearn-auth-token') ? 'Present' : 'Missing');
+            console.log('- USER KEY:', localStorage.getItem(USER_KEY) ? localStorage.getItem(USER_KEY) : 'Missing');
+            console.log('- ALL KEYS:', Object.keys(localStorage));
+            
+            // Check for existing AWS auth token and try to restore session
+            if (checkAuthToken()) {
+                console.log('🎟️ Found stored auth token, attempting to restore AWS session...');
+                
+                // Try to restore user session with AWS token
+                try {
+                    const userProfile = await callAPI('/user/profile');
+                    console.log('✅ AWS session restored successfully');
+                    
+                    const user = {
+                        id: 'aws-' + userProfile.email.replace('@', '-').replace('.', '-'),
+                        name: userProfile.name || userProfile.email.split('@')[0],
+                        email: userProfile.email,
+                        username: userProfile.email,
+                        provider: 'aws'
+                    };
+                    
+                    // Save user to users array if not already exists
+                    const users = getUsers();
+                    const existingUser = users.find(u => u.id === user.id);
+                    if (!existingUser) {
+                        users.push(user);
+                        saveUsers(users);
+                        console.log('💾 Saved AWS user to users array');
+                    }
+                    
+                    setCurrentUser(user);
+                    await loadData();
+                    showMainApp();
+                    showMessage('Welcome back! AWS session restored - using DynamoDB.', 'success');
+                    return;
+                } catch (error) {
+                    console.error('❌ Failed to restore AWS session:', error);
+                    console.log('🧹 Token may be expired, but keeping it for new API calls...');
+                    
+                    // Don't clear token completely - it might work for new API calls
+                    // Just clear user profile but keep authToken available
+                    currentUser = null;
+                }
+            }
+            
+            // Check if user is already logged in locally
+            console.log('🔍 Checking for existing local user session...');
+            currentUser = getCurrentUser();
+            console.log('🔍 getCurrentUser() result:', currentUser);
+            
+            if (currentUser) {
+                console.log('👤 Found local user session:', currentUser.username);
+                await loadData();
+                showMainApp();
+            } else {
+                console.log('🔐 No active session, showing auth page');
+                showAuthPage();
+            }
+            
+            // Debug: Final localStorage state
+            console.log('🔍 LocalStorage state at initApp end:');
+            console.log('- AUTH TOKEN:', localStorage.getItem('savearn-auth-token') ? 'Present' : 'Missing');
+            console.log('- USER KEY:', localStorage.getItem(USER_KEY) ? localStorage.getItem(USER_KEY) : 'Missing');
+            
+            lucide.createIcons();
+            
+            // Mobile enhancements
+            initMobileEnhancements();
+        }
+
+        // Mobile-specific enhancements
+        function initMobileEnhancements() {
+            // Prevent zoom on form inputs for iOS
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea');
+                inputs.forEach(input => {
+                    if (input.style.fontSize === '' || parseFloat(input.style.fontSize) < 16) {
+                        input.style.fontSize = '16px';
+                    }
+                });
+            }
+            
+            // Add touch-friendly scroll behavior
+            const scrollElements = document.querySelectorAll('.overflow-x-auto, .overflow-y-auto');
+            scrollElements.forEach(element => {
+                element.style.webkitOverflowScrolling = 'touch';
+            });
+            
+            // Handle orientation change
+            window.addEventListener('orientationchange', function() {
+                setTimeout(() => {
+                    // Recalculate chart dimensions if visible
+                    if (typeof Chart !== 'undefined') {
+                        Chart.instances.forEach(chart => chart.resize());
+                    }
+                }, 100);
+            });
+            
+            // Improve button tap feedback
+            const buttons = document.querySelectorAll('button, .btn-primary, .btn-success');
+            buttons.forEach(button => {
+                button.style.webkitTapHighlightColor = 'rgba(0,0,0,0.1)';
+                button.style.webkitUserSelect = 'none';
+                button.style.userSelect = 'none';
+            });
+        }
+
+        // Start the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
